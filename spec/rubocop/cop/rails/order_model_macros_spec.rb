@@ -4,13 +4,17 @@ require 'pry'
 describe RuboCop::Cop::Rails::OrderModelMacros do
   subject(:cop) { described_class.new }
 
+  def inspect_source_array(array)
+    inspect_source(array.join("\n"))
+  end
+
   before do
     load_config_for cop, :default
   end
 
   context 'without inheritance' do
     let(:without_inheritance_source) do
-      inspect_source(
+      inspect_source_array(
         [
           'module Bar',
           '  class Foo',
@@ -34,7 +38,7 @@ describe RuboCop::Cop::Rails::OrderModelMacros do
 
   context 'with other things' do
     let(:with_other_things_source) do
-      inspect_source(
+      inspect_source_array(
         [
           'module Bar',
           '  class Foo < ActiveRecord::Base',
@@ -75,7 +79,7 @@ describe RuboCop::Cop::Rails::OrderModelMacros do
   context 'outer grouping' do
     context 'properly ordered' do
       let(:valid_source1) do
-        inspect_source(
+        inspect_source_array(
           [
             'module Bar',
             '  class Foo < ActiveRecord::Base',
@@ -100,7 +104,7 @@ describe RuboCop::Cop::Rails::OrderModelMacros do
     context 'invalid order' do
       context 'basic ordering error' do
         let(:outer_grouping_error_source) do
-          inspect_source(
+          inspect_source_array(
             [
               'module Bar',
               '  class Foo < ActiveRecord::Base',
@@ -132,7 +136,7 @@ describe RuboCop::Cop::Rails::OrderModelMacros do
 
       context 'with callback passed a block' do
         let(:block_callback_source) do
-          inspect_source(
+          inspect_source_array(
             [
               'module Bar',
               '  class Foo < ActiveRecord::Base',
@@ -160,7 +164,7 @@ describe RuboCop::Cop::Rails::OrderModelMacros do
 
       context 'with with_options validations' do
         let(:with_options_validation_source) do
-          inspect_source(
+          inspect_source_array(
             [
               'module Bar',
               '  class Foo < ActiveRecord::Base',
@@ -188,7 +192,7 @@ describe RuboCop::Cop::Rails::OrderModelMacros do
       before { load_config_for cop, :custom }
 
       let(:custom_macro_source) do
-        inspect_source(
+        inspect_source_array(
           [
             'module Bar',
             '  class Foo < ActiveRecord::Base',
@@ -215,7 +219,7 @@ describe RuboCop::Cop::Rails::OrderModelMacros do
   context 'inner grouping' do
     context 'basic invalid ordering' do
       let(:inner_grouping_error_source) do
-        inspect_source(
+        inspect_source_array(
           [
             'module Bar',
             '  class Foo < ActiveRecord::Base',
@@ -239,7 +243,7 @@ describe RuboCop::Cop::Rails::OrderModelMacros do
 
     context 'mixed invalid ordering' do
       let(:mixed_invalid_inner_source) do
-        inspect_source(
+        inspect_source_array(
           [
             'module Bar',
             '  class Foo < ActiveRecord::Base',
@@ -272,7 +276,7 @@ describe RuboCop::Cop::Rails::OrderModelMacros do
       before {  load_config_for cop, :gem }
 
       let(:mixed_invaild_gems) do
-        inspect_source(
+        inspect_source_array(
           [
             'module Bar',
             '  class Foo < ActiveRecord::Base',

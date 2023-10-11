@@ -89,7 +89,9 @@ module RuboCop
 
         def match(child)
           return false unless child && child.respond_to?(:send_type?)
-          return child if matches_targets?(child.method_name)
+
+          return child if child.respond_to?(:method_name) && matches_targets?(child.method_name)
+          return child if child.respond_to?(:name) && matches_targets?(child.name)
           child.children && match(child.children.first)
         end
 
